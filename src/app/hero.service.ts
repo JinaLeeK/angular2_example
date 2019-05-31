@@ -16,6 +16,7 @@ const httpOptions = {
 export class HeroService {
   private heroesUrl = 'api/heroes'; // URL to web api
   // private heroesUrl = 'https://anypoint.mulesoft.com/mocking/api/v1/links/a3664b1a-f26a-44ff-9b77-fdd4e47ce086/members'; // URL to web api
+  // private heroesUrl = 'localhost:8081/flights'; // URL to web api
 
   constructor(
     private http: HttpClient,
@@ -66,12 +67,12 @@ export class HeroService {
   }
 
   /* GET heroes whose name contains search term */
-  searchHeroes(term: string): Observable<Hero[]> {
+  searchHeroes(term: string, param:string = 'name'): Observable<Hero[]> {
     if (!term.trim()) {
       // if not search term, return empty hero array.
       return of([]);
     }
-    return this.http.get<Hero[]>(`${this.heroesUrl}/?name=${term}`).pipe(
+    return this.http.get<Hero[]>(`${this.heroesUrl}/?${param}=${term}`).pipe(
       tap(_ => this.log(`found heroes matching "${term}"`)),
       catchError(this.handleError<Hero[]>('searchHeroes', []))
     );
